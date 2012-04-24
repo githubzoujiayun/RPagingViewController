@@ -1,0 +1,357 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		81519AFE1546616F005E00D3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81519AFD1546616F005E00D3 /* UIKit.framework */; };
+		81519B001546616F005E00D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81519AFF1546616F005E00D3 /* Foundation.framework */; };
+		81519B021546616F005E00D3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81519B011546616F005E00D3 /* CoreGraphics.framework */; };
+		81519B081546616F005E00D3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81519B061546616F005E00D3 /* InfoPlist.strings */; };
+		81519B0A1546616F005E00D3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B091546616F005E00D3 /* main.m */; };
+		81519B0E15466170005E00D3 /* RTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B0D15466170005E00D3 /* RTAppDelegate.m */; };
+		81519B1115466170005E00D3 /* RTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B1015466170005E00D3 /* RTViewController.m */; };
+		81519B1415466170005E00D3 /* RTViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81519B1215466170005E00D3 /* RTViewController_iPhone.xib */; };
+		81519B1715466170005E00D3 /* RTViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81519B1515466170005E00D3 /* RTViewController_iPad.xib */; };
+		81519B2215466304005E00D3 /* RSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B2115466304005E00D3 /* RSlideView.m */; };
+		81519B2515466384005E00D3 /* RPagingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B2415466384005E00D3 /* RPagingViewController.m */; };
+		81519B291546713C005E00D3 /* BlueController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B271546713C005E00D3 /* BlueController.m */; };
+		81519B2A1546713C005E00D3 /* BlueController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81519B281546713C005E00D3 /* BlueController.xib */; };
+		81519B2E1546717C005E00D3 /* RedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B2C1546717B005E00D3 /* RedController.m */; };
+		81519B2F1546717C005E00D3 /* RedController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81519B2D1546717C005E00D3 /* RedController.xib */; };
+		81519B33154671B7005E00D3 /* GreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B31154671B6005E00D3 /* GreenController.m */; };
+		81519B34154671B7005E00D3 /* GreenController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81519B32154671B7005E00D3 /* GreenController.xib */; };
+		81519B3815468854005E00D3 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 81519B3715468854005E00D3 /* bg.jpg */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		81519AF91546616F005E00D3 /* RPagingView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RPagingView.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		81519AFD1546616F005E00D3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		81519AFF1546616F005E00D3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		81519B011546616F005E00D3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		81519B051546616F005E00D3 /* RPagingView-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RPagingView-Info.plist"; sourceTree = "<group>"; };
+		81519B071546616F005E00D3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		81519B091546616F005E00D3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		81519B0B1546616F005E00D3 /* RPagingView-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RPagingView-Prefix.pch"; sourceTree = "<group>"; };
+		81519B0C15466170005E00D3 /* RTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTAppDelegate.h; sourceTree = "<group>"; };
+		81519B0D15466170005E00D3 /* RTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTAppDelegate.m; sourceTree = "<group>"; };
+		81519B0F15466170005E00D3 /* RTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTViewController.h; sourceTree = "<group>"; };
+		81519B1015466170005E00D3 /* RTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTViewController.m; sourceTree = "<group>"; };
+		81519B1315466170005E00D3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RTViewController_iPhone.xib; sourceTree = "<group>"; };
+		81519B1615466170005E00D3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RTViewController_iPad.xib; sourceTree = "<group>"; };
+		81519B1F15466304005E00D3 /* RSlideView+PrivateMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RSlideView+PrivateMethods.h"; sourceTree = "<group>"; };
+		81519B2015466304005E00D3 /* RSlideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSlideView.h; sourceTree = "<group>"; };
+		81519B2115466304005E00D3 /* RSlideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSlideView.m; sourceTree = "<group>"; };
+		81519B2315466384005E00D3 /* RPagingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPagingViewController.h; sourceTree = "<group>"; };
+		81519B2415466384005E00D3 /* RPagingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPagingViewController.m; sourceTree = "<group>"; };
+		81519B261546713C005E00D3 /* BlueController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueController.h; sourceTree = "<group>"; };
+		81519B271546713C005E00D3 /* BlueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueController.m; sourceTree = "<group>"; };
+		81519B281546713C005E00D3 /* BlueController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BlueController.xib; sourceTree = "<group>"; };
+		81519B2B1546717B005E00D3 /* RedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedController.h; sourceTree = "<group>"; };
+		81519B2C1546717B005E00D3 /* RedController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedController.m; sourceTree = "<group>"; };
+		81519B2D1546717C005E00D3 /* RedController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RedController.xib; sourceTree = "<group>"; };
+		81519B30154671B6005E00D3 /* GreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreenController.h; sourceTree = "<group>"; };
+		81519B31154671B6005E00D3 /* GreenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GreenController.m; sourceTree = "<group>"; };
+		81519B32154671B7005E00D3 /* GreenController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GreenController.xib; sourceTree = "<group>"; };
+		81519B3715468854005E00D3 /* bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bg.jpg; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		81519AF61546616F005E00D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81519AFE1546616F005E00D3 /* UIKit.framework in Frameworks */,
+				81519B001546616F005E00D3 /* Foundation.framework in Frameworks */,
+				81519B021546616F005E00D3 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		81519AEE1546616F005E00D3 = {
+			isa = PBXGroup;
+			children = (
+				81519B031546616F005E00D3 /* RPagingView */,
+				81519AFC1546616F005E00D3 /* Frameworks */,
+				81519AFA1546616F005E00D3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		81519AFA1546616F005E00D3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				81519AF91546616F005E00D3 /* RPagingView.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		81519AFC1546616F005E00D3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				81519AFD1546616F005E00D3 /* UIKit.framework */,
+				81519AFF1546616F005E00D3 /* Foundation.framework */,
+				81519B011546616F005E00D3 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		81519B031546616F005E00D3 /* RPagingView */ = {
+			isa = PBXGroup;
+			children = (
+				81519B1D154662F1005E00D3 /* Classes */,
+				81519B3715468854005E00D3 /* bg.jpg */,
+				81519B0C15466170005E00D3 /* RTAppDelegate.h */,
+				81519B0D15466170005E00D3 /* RTAppDelegate.m */,
+				81519B0F15466170005E00D3 /* RTViewController.h */,
+				81519B1015466170005E00D3 /* RTViewController.m */,
+				81519B1215466170005E00D3 /* RTViewController_iPhone.xib */,
+				81519B1515466170005E00D3 /* RTViewController_iPad.xib */,
+				81519B041546616F005E00D3 /* Supporting Files */,
+				81519B261546713C005E00D3 /* BlueController.h */,
+				81519B271546713C005E00D3 /* BlueController.m */,
+				81519B281546713C005E00D3 /* BlueController.xib */,
+				81519B2B1546717B005E00D3 /* RedController.h */,
+				81519B2C1546717B005E00D3 /* RedController.m */,
+				81519B2D1546717C005E00D3 /* RedController.xib */,
+				81519B30154671B6005E00D3 /* GreenController.h */,
+				81519B31154671B6005E00D3 /* GreenController.m */,
+				81519B32154671B7005E00D3 /* GreenController.xib */,
+			);
+			path = RPagingView;
+			sourceTree = "<group>";
+		};
+		81519B041546616F005E00D3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				81519B051546616F005E00D3 /* RPagingView-Info.plist */,
+				81519B061546616F005E00D3 /* InfoPlist.strings */,
+				81519B091546616F005E00D3 /* main.m */,
+				81519B0B1546616F005E00D3 /* RPagingView-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		81519B1D154662F1005E00D3 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				81519B1E15466304005E00D3 /* RSlideView */,
+				81519B2315466384005E00D3 /* RPagingViewController.h */,
+				81519B2415466384005E00D3 /* RPagingViewController.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		81519B1E15466304005E00D3 /* RSlideView */ = {
+			isa = PBXGroup;
+			children = (
+				81519B1F15466304005E00D3 /* RSlideView+PrivateMethods.h */,
+				81519B2015466304005E00D3 /* RSlideView.h */,
+				81519B2115466304005E00D3 /* RSlideView.m */,
+			);
+			path = RSlideView;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		81519AF81546616F005E00D3 /* RPagingView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81519B1A15466170005E00D3 /* Build configuration list for PBXNativeTarget "RPagingView" */;
+			buildPhases = (
+				81519AF51546616F005E00D3 /* Sources */,
+				81519AF61546616F005E00D3 /* Frameworks */,
+				81519AF71546616F005E00D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RPagingView;
+			productName = RPagingView;
+			productReference = 81519AF91546616F005E00D3 /* RPagingView.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		81519AF01546616F005E00D3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 81519AF31546616F005E00D3 /* Build configuration list for PBXProject "RPagingView" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 81519AEE1546616F005E00D3;
+			productRefGroup = 81519AFA1546616F005E00D3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				81519AF81546616F005E00D3 /* RPagingView */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		81519AF71546616F005E00D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81519B081546616F005E00D3 /* InfoPlist.strings in Resources */,
+				81519B1415466170005E00D3 /* RTViewController_iPhone.xib in Resources */,
+				81519B1715466170005E00D3 /* RTViewController_iPad.xib in Resources */,
+				81519B2A1546713C005E00D3 /* BlueController.xib in Resources */,
+				81519B2F1546717C005E00D3 /* RedController.xib in Resources */,
+				81519B34154671B7005E00D3 /* GreenController.xib in Resources */,
+				81519B3815468854005E00D3 /* bg.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		81519AF51546616F005E00D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81519B0A1546616F005E00D3 /* main.m in Sources */,
+				81519B0E15466170005E00D3 /* RTAppDelegate.m in Sources */,
+				81519B1115466170005E00D3 /* RTViewController.m in Sources */,
+				81519B2215466304005E00D3 /* RSlideView.m in Sources */,
+				81519B2515466384005E00D3 /* RPagingViewController.m in Sources */,
+				81519B291546713C005E00D3 /* BlueController.m in Sources */,
+				81519B2E1546717C005E00D3 /* RedController.m in Sources */,
+				81519B33154671B7005E00D3 /* GreenController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		81519B061546616F005E00D3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				81519B071546616F005E00D3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		81519B1215466170005E00D3 /* RTViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				81519B1315466170005E00D3 /* en */,
+			);
+			name = RTViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		81519B1515466170005E00D3 /* RTViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				81519B1615466170005E00D3 /* en */,
+			);
+			name = RTViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		81519B1815466170005E00D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		81519B1915466170005E00D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		81519B1B15466170005E00D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RPagingView/RPagingView-Prefix.pch";
+				INFOPLIST_FILE = "RPagingView/RPagingView-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		81519B1C15466170005E00D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RPagingView/RPagingView-Prefix.pch";
+				INFOPLIST_FILE = "RPagingView/RPagingView-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		81519AF31546616F005E00D3 /* Build configuration list for PBXProject "RPagingView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81519B1815466170005E00D3 /* Debug */,
+				81519B1915466170005E00D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81519B1A15466170005E00D3 /* Build configuration list for PBXNativeTarget "RPagingView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81519B1B15466170005E00D3 /* Debug */,
+				81519B1C15466170005E00D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 81519AF01546616F005E00D3 /* Project object */;
+}
