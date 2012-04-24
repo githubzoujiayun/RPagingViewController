@@ -31,14 +31,23 @@
 
 
 @protocol RPageControllDataSource <NSObject>
-
+@optional
 - (NSString*)RPageControllTitleForPage:(NSInteger)index;
+
+@end
+
+@protocol RPageControllDelegate <NSObject>
+@optional
+- (void)RPageControllDidChangePage:(RPageControll*)pageControl;
 
 @end
 
 
 @interface RSlideView : UIControl 
-<UIScrollViewDelegate,RPageControllDataSource,UIGestureRecognizerDelegate> {
+<UIScrollViewDelegate,
+RPageControllDataSource,
+RPageControllDelegate,
+UIGestureRecognizerDelegate> {
     NSInteger                   _totalPages;
     NSInteger                   _currentPage;
     
@@ -89,16 +98,26 @@ typedef enum {
     RPageControllTitleAlignRight
 }RPageControlTitleAlignment;
 
-@interface RPageControll : UIPageControl {
+@interface RPageControll : UIView {
 @private
     UILabel                     *_titleLabel;
+    UIPageControl               *_pageControl;
 }
+
 @property (nonatomic, assign) NSString *title;
 @property (nonatomic, assign) id<RPageControllDataSource> dataSource;
+@property (nonatomic, assign) id<RPageControllDelegate> delegate;
 @property (nonatomic, assign) RPageControlTitleAlignment titleAlignment;
 @property (nonatomic, assign) CGFloat dotMargin;
 @property (nonatomic, assign) CGFloat dotRadius;
 @property (nonatomic, assign) CGFloat highlightedDotRadius;
 @property (nonatomic, retain) UIImage *dotImage;
 @property (nonatomic, retain) UIImage *highlightedDotImage;
+@property (nonatomic, assign) NSInteger numberOfPages;
+@property (nonatomic, assign) NSInteger currentPage;
+
+
+- (void)setNumberOfPages:(NSInteger)numberOfPages;
+- (void)setCurrentPage:(NSInteger)currentPage;
+
 @end

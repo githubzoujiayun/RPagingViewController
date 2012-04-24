@@ -70,6 +70,13 @@ enum {
         [longPress release];
         
         _longPress = longPress;
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                              action:@selector(tapGestureHandler:)];
+        tap.numberOfTapsRequired = 1;
+        tap.numberOfTouchesRequired = 1;
+        [self addGestureRecognizer:tap];
+        [tap release];
         /*
          [self addTarget:self
          action:@selector(onTapdown:)
@@ -79,7 +86,7 @@ enum {
          forControlEvents:UIControlEventTouchUpInside];
          */
         
-        [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:longPress];
+            //[self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:longPress];
         [self.scrollView.panGestureRecognizer addTarget:self
                                                  action:@selector(panGestureHandler:)];
         
@@ -112,15 +119,9 @@ enum {
     if (!_pageControl) {
         _pageControl = [[RPageControll alloc] initWithFrame:self.bounds];
         _pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-        _pageControl.hidesForSinglePage = YES;
         _pageControl.hidden = YES;
-        _pageControl.defersCurrentPageDisplay = YES;
         _pageControl.dataSource = self;
-        _pageControl.contentVerticalAlignment = UIControlContentVerticalAlignmentBottom;
-        _pageControl.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [_pageControl addTarget:self
-                         action:@selector(onPageControlValueChange:)
-               forControlEvents:UIControlEventValueChanged];
+        _pageControl.delegate = self;
     }
     return _pageControl;
 }
@@ -171,10 +172,12 @@ enum {
     
     _continuousScroll = continusScroll;
     if (_continuousScroll) {
+        self.scrollView.pagingEnabled = NO;
         [self.scrollView.panGestureRecognizer removeTarget:self 
                                                     action:@selector(panGestureHandler:)];
     }
     else {
+        self.scrollView.pagingEnabled = (_scrollWidth == CGRectGetWidth(_scrollView.frame));
         [self.scrollView.panGestureRecognizer addTarget:self
                                                  action:@selector(panGestureHandler:)];
     }
@@ -332,21 +335,14 @@ enum {
 - (void)adjustScrollViewOffsetToSinglePage
 {
         //CGFloat width = self.scrollView.frame.size.width;
+    if (self.scrollView.isDecelerating)
+        return;
+    
     self.pageControl.currentPage = _currentPage;
     [self.scrollView setContentOffset:CGPointMake(_currentPage*_scrollWidth+_loopOffset, 0) 
                              animated:YES];
 }
 
-- (void)onPageControlValueChange:(id)sender
-{
-    NSInteger page = self.pageControl.currentPage;
-    
-    CGPoint offset = CGPointMake(_scrollWidth*page+_loopOffset, 0);
-    
-    [self.scrollView setContentOffset:offset
-                             animated:YES];
-        //self.pageControl.currentPage = page;
-}
 
 - (void)onTapdown:(id)sender
 {
@@ -365,6 +361,27 @@ enum {
 - (void)longPressGestureHandler:(UILongPressGestureRecognizer *)longPress
 {
     switch (longPress.state) {
+        case UIGestureRecognizerStateBegan:
+            if ([self.delegate respondsToSelector:@selector(RSlideView:tapStartOnPageAtIndex:)]) {
+                [self.delegate RSlideView:self tapStartOnPageAtIndex:_currentPage];
+            }
+            break;
+        case UIGestureRecognizerStateChanged:
+            break;
+        case UIGestureRecognizerStateEnded:
+            if ([self.delegate respondsToSelector:@selector(RSlideView:tapEndOnPageAtIndex:)]) {
+                [self.delegate RSlideView:self tapEndOnPageAtIndex:_currentPage];
+            }
+            [self adjustScrollViewOffsetToSinglePage];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)tapGestureHandler:(UITapGestureRecognizer *)tap
+{
+    switch (tap.state) {
         case UIGestureRecognizerStateBegan:
             if ([self.delegate respondsToSelector:@selector(RSlideView:tapStartOnPageAtIndex:)]) {
                 [self.delegate RSlideView:self tapStartOnPageAtIndex:_currentPage];
@@ -475,7 +492,6 @@ enum {
 {
     if (_allowScrollToPage) {
         _allowScrollToPage = NO;
-        _longPress.enabled = NO;
         [self.scrollView setContentOffset:CGPointMake(_scrollWidth*index+_loopOffset, 0)
                                  animated:YES];
     }
@@ -496,6 +512,18 @@ enum {
     return nil;
 }
 
+#pragma mark - RPageControl Delegate
+
+- (void)RPageControllDidChangePage:(RPageControll *)pageControl
+{
+    NSInteger page = self.pageControl.currentPage;
+    
+    CGPoint offset = CGPointMake(_scrollWidth*page+_loopOffset, 0);
+    
+    [self.scrollView setContentOffset:offset
+                             animated:YES];
+}
+
 #pragma mark - UIScrollView Delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -511,6 +539,10 @@ enum {
     NSInteger displayingPage = floorf((offset + halfWidth) / _scrollWidth);
     
     if (displayingPage != _currentPage) {   // have to load new page
+        if (!self.loopSlide) {
+            if (displayingPage < 0 || displayingPage >= _totalPages)
+                return;
+        }
         _currentPage = displayingPage;
         
         CGPoint offset = self.scrollView.contentOffset;
@@ -569,7 +601,6 @@ enum {
     self.pageControl.currentPage = _currentPage;
     
     _allowScrollToPage = YES;
-    _longPress.enabled = YES;
 }
 
 #pragma mark - UIGesture Delegate
@@ -581,17 +612,51 @@ enum {
 @implementation RPageControll
 @synthesize title = _title;
 @synthesize dataSource = _dataSource;
+@synthesize delegate = _delegate;
 @synthesize titleAlignment;
 @synthesize dotImage = _dotImage, highlightedDotImage = _highlightedDotImage;
 @synthesize dotMargin, dotRadius, highlightedDotRadius;
+@synthesize numberOfPages = _numberOfPages, currentPage = _currentPage;
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.autoresizesSubviews = YES;
+        self.clipsToBounds = YES;
+        
+        _pageControl = [[UIPageControl alloc] initWithFrame:self.bounds];
+        _pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _pageControl.hidesForSinglePage = YES;
+        _pageControl.defersCurrentPageDisplay = YES;
+        _pageControl.contentVerticalAlignment = UIControlContentVerticalAlignmentBottom;
+        _pageControl.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [_pageControl addTarget:self
+                         action:@selector(onPageChanged:)
+               forControlEvents:UIControlEventValueChanged];
+        
+        [self addSubview:_pageControl];
+        [_pageControl release];
+    }
+    return self;
+}
+
+- (void)onPageChanged:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(RPageControllDidChangePage:)]) {
+        [self.delegate RPageControllDidChangePage:self];
+    }
+}
 
 - (void)setTitle:(NSString *)title
 {
     if (![title isEqualToString:@""]) {
         
         if (!_titleLabel) {
-            self.backgroundColor = [UIColor blackColor];
-            self.alpha = 0.5;
+            self.backgroundColor = [UIColor colorWithRed:0.f
+                                                   green:0.f
+                                                    blue:0.f
+                                                   alpha:0.6f];
             
             UILabel *label = [[UILabel alloc] initWithFrame:self.bounds];
             label.font = [UIFont systemFontOfSize:12];
@@ -611,7 +676,6 @@ enum {
     }
     else {
         self.backgroundColor = [UIColor clearColor];
-        self.alpha = 1.0;
     }
     
     _titleLabel.text = title;
@@ -619,47 +683,57 @@ enum {
 
 - (void)setCurrentPage:(NSInteger)currentPage
 {
-    [super setCurrentPage:currentPage];
+    [_pageControl setCurrentPage:currentPage];
     if ([self.dataSource respondsToSelector:@selector(RPageControllTitleForPage:)]) {
         self.title = [self.dataSource RPageControllTitleForPage:currentPage];
     }
 }
 
+- (NSInteger)currentPage
+{
+    return _pageControl.currentPage;
+}
+
 - (void)setNumberOfPages:(NSInteger)numberOfPages
 {
-    if (!self.hidden)
-        super.numberOfPages = numberOfPages;
-    else
-        super.numberOfPages = 0;
+    _pageControl.numberOfPages = numberOfPages;
+    CGRect frame = _pageControl.frame;
+    frame.size.width = numberOfPages * 16 + 8;
+    switch (titleAlignment) {
+        case RPageControllTitleAlignLeft:
+            frame.origin.x = self.bounds.size.width - frame.size.width;
+            break;
+        case RPageControllTitleAlignRight:
+            frame.origin.x = 0;
+        default:
+            break;
+    }
+    _pageControl.frame = frame;
+}
+
+- (NSInteger)numberOfPages
+{
+    return _pageControl.numberOfPages;
 }
 
 - (void)setTitleAlignment:(RPageControlTitleAlignment)_titleAlignment
 {
     titleAlignment = _titleAlignment;
     CGRect frame = self.bounds;
-    frame.size.width /= 2;
+    frame.size.width = CGRectGetWidth(frame) - CGRectGetWidth(_pageControl.frame);
     switch (titleAlignment) {
         case RPageControllTitleAlignLeft:
             _titleLabel.frame = frame;
             _titleLabel.textAlignment = UITextAlignmentLeft;
             break;
         case RPageControllTitleAlignRight:
-            frame.origin.x = frame.size.width;
+            frame.origin.x = CGRectGetWidth(_pageControl.frame);
             _titleLabel.frame = frame;
             _titleLabel.textAlignment = UITextAlignmentRight;
             break;
         default:
             break;
     }
-}
-
-- (void)setAlpha:(CGFloat)alpha
-{
-    if (_titleLabel) {
-        if (alpha > 0.5)
-            alpha = 0.5;
-    }
-    [super setAlpha:alpha];
 }
 
 @end
