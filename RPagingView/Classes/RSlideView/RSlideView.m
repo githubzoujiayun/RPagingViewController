@@ -60,35 +60,27 @@ enum {
         self.pageMargin = 0.f;
         self.pageSize = frame.size;
         
-        
+        /*
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureHandler:)];
         longPress.numberOfTouchesRequired = 1;
-        longPress.minimumPressDuration = 0.1;
+        longPress.minimumPressDuration = 0.05;
         longPress.delaysTouchesBegan = NO;
         longPress.delegate = self;
         [self addGestureRecognizer:longPress];
         [longPress release];
         
         _longPress = longPress;
-        
+        */
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                               action:@selector(tapGestureHandler:)];
         tap.numberOfTapsRequired = 1;
         tap.numberOfTouchesRequired = 1;
         [self addGestureRecognizer:tap];
         [tap release];
-        /*
-         [self addTarget:self
-         action:@selector(onTapdown:)
-         forControlEvents:UIControlEventAllTouchEvents];
-         [self addTarget:self
-         action:@selector(onTapupinside:)
-         forControlEvents:UIControlEventTouchUpInside];
-         */
+
+         
         
             //[self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:longPress];
-        [self.scrollView.panGestureRecognizer addTarget:self
-                                                 action:@selector(panGestureHandler:)];
         
         [[NSNotificationCenter defaultCenter] addObserver:self 
                                                  selector:@selector(didReceiveMemoryWarning:)
@@ -111,6 +103,17 @@ enum {
  // Drawing code
  }
  */
+/*
+- (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    if (CGRectContainsPoint(_pageControl.frame, point))
+        return [_pageControl hitTest:[self convertPoint:point toView:_pageControl]
+                           withEvent:event];
+    else if (CGRectContainsPoint(self.bounds, point))
+        return _scrollView;
+    return nil;
+}
+ */
 
 #pragma mark - getter/setter
 
@@ -126,13 +129,14 @@ enum {
     return _pageControl;
 }
 
-- (UIScrollView*)scrollView
+- (RScrollView*)scrollView
 {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        _scrollView = [[RScrollView alloc] initWithFrame:self.bounds];
         _scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _scrollView.pagingEnabled = YES;
         _scrollView.scrollEnabled = YES;
+        _scrollView.clipsToBounds = NO;
         _scrollView.bounces = YES;
         _scrollView.backgroundColor = [UIColor clearColor];
         _scrollView.showsVerticalScrollIndicator = NO;
@@ -159,6 +163,17 @@ enum {
                      }];
 }
 
+- (void)setPageControlHidden:(BOOL)pageControlHidden
+{
+    [self setPageControlHidden:pageControlHidden
+                      animated:NO];
+}
+
+- (void)setPageTitleAlignment:(RPageControlTitleAlignment)align
+{
+    self.pageControl.titleAlignment = align;
+}
+
 - (void)setDataSource:(id<RSlideViewDataSource>)dataSource
 {
     _dataSource = dataSource;
@@ -171,17 +186,8 @@ enum {
         return;
     
     _continuousScroll = continusScroll;
-    if (_continuousScroll) {
-        self.scrollView.pagingEnabled = NO;
-        [self.scrollView.panGestureRecognizer removeTarget:self 
-                                                    action:@selector(panGestureHandler:)];
-    }
-    else {
-        self.scrollView.pagingEnabled = (_scrollWidth == CGRectGetWidth(_scrollView.frame));
-        [self.scrollView.panGestureRecognizer addTarget:self
-                                                 action:@selector(panGestureHandler:)];
-    }
-        //self.scrollView.pagingEnabled = !_continuousScroll;
+
+    self.scrollView.pagingEnabled = !_continuousScroll;
 }
 
 - (void)setLoopSlide:(BOOL)loopSlide
@@ -192,14 +198,13 @@ enum {
     _loopSlide = loopSlide;
     
     if (_loopSlide) {
-        _loopOffset = self.scrollView.frame.size.width;
-        
-        self.scrollView.contentOffset = CGPointMake(self.scrollView.contentOffset.x+_loopOffset, 0);
+
+        CGFloat w = self.frame.size.width;
+        _scrollView.contentInset = UIEdgeInsetsMake(0, 2*w, 0, 2*w);
+
     }
     else {
-        CGFloat f = _loopOffset;
-        _loopOffset = 0;
-        self.scrollView.contentOffset = CGPointMake(self.scrollView.contentOffset.x-f, 0);
+        _scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         [self collectReusableViews];
     }
     [self updateContentSize];
@@ -209,14 +214,12 @@ enum {
 - (void)setPageSize:(CGSize)pageSize
 {
     NSAssert(pageSize.width <= self.bounds.size.width, @"The page width should be smaller than view width");
-    if (pageSize.width == self.scrollView.bounds.size.width) {
-        self.scrollView.pagingEnabled = YES;
-    }
-    else {
-        self.scrollView.pagingEnabled = NO;
-    }
+
     if (!CGSizeEqualToSize(_pageSize, pageSize)) {
         _pageSize = pageSize;
+        _scrollView.frame = CGRectMake((CGRectGetWidth(self.bounds)-_pageSize.width-_pageMargin)/2, 
+                                       (CGRectGetHeight(self.bounds)-_pageSize.height)/2,
+                                       _pageSize.width+_pageMargin,_pageSize.height);
         [self updateVisibalePages];
     }
 }
@@ -232,6 +235,9 @@ enum {
 {
     if (_pageMargin != pageMargin) {
         _pageMargin = pageMargin;
+        _scrollView.frame = CGRectMake((CGRectGetWidth(self.bounds)-_pageSize.width-_pageMargin)/2, 
+                                       (CGRectGetHeight(self.bounds)-_pageSize.height)/2,
+                                       _pageSize.width+_pageMargin,_pageSize.height);
         [self updateVisibalePages];
     }
 }
@@ -271,7 +277,7 @@ enum {
         view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.scrollView addSubview:view];
     }
-    view.frame = CGRectMake(_centralizeOffset + _pageMargin + _scrollWidth * index + _loopOffset,
+    view.frame = CGRectMake(_pageMargin / 2 + size.width * index,
                             (size.height - _pageSize.height) / 2,
                             _pageSize.width, _pageSize.height);
 }
@@ -318,18 +324,16 @@ enum {
     if (CGSizeEqualToSize(_pageSize, CGSizeZero))
         return;
     
-    _visibleNumberOfViewsPerPage = floorf((self.scrollView.bounds.size.width - _pageSize.width - _pageMargin) / (2 * (_pageSize.width + _pageMargin))) * 2 + 1;
-    _extraPagesForLoopShow = ceilf(self.scrollView.bounds.size.width / (2*(_pageMargin + _pageSize.width)));
-    _scrollWidth = _pageMargin + _pageSize.width;
-    _centralizeOffset = (self.scrollView.bounds.size.width - _pageSize.width) / 2 - _pageMargin;
+    _visibleNumberOfViewsPerPage = floorf((CGRectGetWidth(self.bounds) - _pageSize.width - _pageMargin) / (2 * (_pageSize.width + _pageMargin))) * 2 + 1;
+    _extraPagesForLoopShow = ceilf(self.bounds.size.width / (2*(_pageMargin + _pageSize.width)));
     
     [self reloadData];
 }
 
 - (void)updateContentSize
 {
-    self.scrollView.contentSize = CGSizeMake(_scrollWidth*_totalPages+_pageMargin+_centralizeOffset*2+_loopOffset*2,
-                                             self.scrollView.bounds.size.height);
+    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame)*_totalPages,
+                                             _scrollView.bounds.size.height);
 }
 
 - (void)adjustScrollViewOffsetToSinglePage
@@ -339,23 +343,8 @@ enum {
         return;
     
     self.pageControl.currentPage = _currentPage;
-    [self.scrollView setContentOffset:CGPointMake(_currentPage*_scrollWidth+_loopOffset, 0) 
+    [self.scrollView setContentOffset:CGPointMake(_currentPage*_scrollView.frame.size.width, 0) 
                              animated:YES];
-}
-
-
-- (void)onTapdown:(id)sender
-{
-    if ([self.delegate respondsToSelector:@selector(RSlideView:tapStartOnPageAtIndex:)]) {
-        [self.delegate RSlideView:self tapStartOnPageAtIndex:_currentPage];
-    }
-}
-
-- (void)onTapupinside:(id)sender
-{
-    if ([self.delegate respondsToSelector:@selector(RSlideView:tapEndOnPageAtIndex:)]) {
-        [self.delegate RSlideView:self tapEndOnPageAtIndex:_currentPage];
-    }
 }
 
 - (void)longPressGestureHandler:(UILongPressGestureRecognizer *)longPress
@@ -448,7 +437,7 @@ enum {
     
     [self updateContentSize];
     
-    self.scrollView.contentOffset = CGPointMake(_scrollWidth * _currentPage+_loopOffset, 0);
+    self.scrollView.contentOffset = CGPointMake(_scrollView.frame.size.width * _currentPage, 0);
     
     [self loadNeededPages];
 }
@@ -492,14 +481,14 @@ enum {
 {
     if (_allowScrollToPage) {
         _allowScrollToPage = NO;
-        [self.scrollView setContentOffset:CGPointMake(_scrollWidth*index+_loopOffset, 0)
+        [self.scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width*index, 0)
                                  animated:YES];
     }
 }
 
 - (void)scrollToPageOffset:(CGFloat)pageOffset
 {
-    CGPoint offset = CGPointMake(pageOffset*_scrollWidth+_loopOffset, 0);
+    CGPoint offset = CGPointMake(pageOffset*_scrollView.frame.size.width, 0);
     self.scrollView.contentOffset = offset;
 }
 
@@ -518,7 +507,7 @@ enum {
 {
     NSInteger page = self.pageControl.currentPage;
     
-    CGPoint offset = CGPointMake(_scrollWidth*page+_loopOffset, 0);
+    CGPoint offset = CGPointMake(_scrollView.frame.size.width*page, 0);
     
     [self.scrollView setContentOffset:offset
                              animated:YES];
@@ -528,15 +517,15 @@ enum {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    CGFloat halfWidth = _scrollWidth / 2.f;
-    CGFloat offset = scrollView.contentOffset.x - _loopOffset;
+    CGFloat halfWidth = _scrollView.frame.size.width / 2.f;
+    CGFloat offset = scrollView.contentOffset.x;
     
     if ([self.delegate respondsToSelector:@selector(RSlideView:didScrollAtPageOffset:)]) {
         [self.delegate RSlideView:self
-            didScrollAtPageOffset:offset / _scrollWidth];
+            didScrollAtPageOffset:offset / _scrollView.frame.size.width];
     }
     
-    NSInteger displayingPage = floorf((offset + halfWidth) / _scrollWidth);
+    NSInteger displayingPage = floorf((offset + halfWidth) / _scrollView.frame.size.width);
     
     if (displayingPage != _currentPage) {   // have to load new page
         if (!self.loopSlide) {
@@ -548,11 +537,11 @@ enum {
         CGPoint offset = self.scrollView.contentOffset;
         if (_currentPage <= -1) {
             _currentPage = _totalPages - 1;
-            offset.x += _scrollWidth * _totalPages;
+            offset.x += _scrollView.frame.size.width * _totalPages;
         }
         else if (_currentPage >= _totalPages) {
             _currentPage = 0;
-            offset.x += - _scrollWidth * _totalPages;
+            offset.x += - _scrollView.frame.size.width * _totalPages;
         }
             //self.scrollView.delegate = nil;
         self.scrollView.contentOffset = offset;
@@ -594,9 +583,9 @@ enum {
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    CGFloat halfWidth = _scrollWidth / 2.f;
+    CGFloat halfWidth = _scrollView.frame.size.width / 2.f;
     
-    _currentPage = floorf((scrollView.contentOffset.x - _loopOffset + halfWidth) / _scrollWidth);
+    _currentPage = floorf((scrollView.contentOffset.x + halfWidth) / _scrollView.frame.size.width);
         //[self adjustScrollViewOffsetToSinglePage];
     self.pageControl.currentPage = _currentPage;
     
@@ -629,6 +618,7 @@ enum {
         _pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _pageControl.hidesForSinglePage = YES;
         _pageControl.defersCurrentPageDisplay = YES;
+        _pageControl.userInteractionEnabled = YES;
         _pageControl.contentVerticalAlignment = UIControlContentVerticalAlignmentBottom;
         _pageControl.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_pageControl addTarget:self
@@ -639,6 +629,13 @@ enum {
         [_pageControl release];
     }
     return self;
+}
+
+- (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    if (CGRectContainsPoint(self.bounds, point))
+        return _pageControl;
+    return nil;
 }
 
 - (void)onPageChanged:(id)sender
@@ -725,15 +722,47 @@ enum {
         case RPageControllTitleAlignLeft:
             _titleLabel.frame = frame;
             _titleLabel.textAlignment = UITextAlignmentLeft;
+            _pageControl.frame = CGRectMake(CGRectGetWidth(self.frame)-CGRectGetWidth(_pageControl.frame),0,
+                                            CGRectGetWidth(_pageControl.frame), CGRectGetHeight(_pageControl.frame));
             break;
         case RPageControllTitleAlignRight:
             frame.origin.x = CGRectGetWidth(_pageControl.frame);
             _titleLabel.frame = frame;
             _titleLabel.textAlignment = UITextAlignmentRight;
+            _pageControl.frame = CGRectMake(0, 0, _pageControl.frame.size.width,
+                                            _pageControl.frame.size.height);
             break;
         default:
             break;
     }
+}
+
+@end
+
+@implementation RScrollView
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    [self.superview touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesMoved:touches withEvent:event];
+    [self.superview touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+    [self.superview touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesCancelled:touches withEvent:event];
+    [self.superview touchesCancelled:touches withEvent:event];
 }
 
 @end
