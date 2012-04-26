@@ -103,7 +103,7 @@ enum {
  // Drawing code
  }
  */
-/*
+
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     if (CGRectContainsPoint(_pageControl.frame, point))
@@ -113,7 +113,6 @@ enum {
         return _scrollView;
     return nil;
 }
- */
 
 #pragma mark - getter/setter
 
@@ -253,6 +252,9 @@ enum {
 
 - (void)loadNeededPages
 {
+    if (_totalPages == 0)
+        return;
+    
     for (NSInteger i = _currentPage-_extraPagesForLoopShow; i <= _currentPage+_extraPagesForLoopShow; ++i) {
         if (!self.loopSlide && !(0 <= i && i < _totalPages))
             continue;
@@ -263,10 +265,11 @@ enum {
 - (void)loadViewOfPageAtIndex:(NSInteger)index
 {
     NSInteger indexToLoad = index;
-    if (indexToLoad < 0)
-        indexToLoad += _totalPages;
+    if (indexToLoad < 0) {
+        indexToLoad = (NSInteger)((-indexToLoad + _totalPages - 1)/_totalPages)*_totalPages + indexToLoad;
+    }
     else if (indexToLoad > _totalPages - 1)
-        indexToLoad -= _totalPages;
+        indexToLoad %= _totalPages;
     
     CGSize size = self.scrollView.bounds.size;
     UIView *view = [self viewOfPageAtIndex:index];

@@ -25,6 +25,7 @@
 		81519B33154671B7005E00D3 /* GreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B31154671B6005E00D3 /* GreenController.m */; };
 		81519B34154671B7005E00D3 /* GreenController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81519B32154671B7005E00D3 /* GreenController.xib */; };
 		81519B3815468854005E00D3 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 81519B3715468854005E00D3 /* bg.jpg */; };
+		818C34F115492A8500AAE9D2 /* gbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 818C34F015492A8400AAE9D2 /* gbg.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		81519B31154671B6005E00D3 /* GreenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GreenController.m; sourceTree = "<group>"; };
 		81519B32154671B7005E00D3 /* GreenController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GreenController.xib; sourceTree = "<group>"; };
 		81519B3715468854005E00D3 /* bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bg.jpg; sourceTree = "<group>"; };
+		818C34F015492A8400AAE9D2 /* gbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gbg.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			children = (
 				81519B1D154662F1005E00D3 /* Classes */,
 				81519B3715468854005E00D3 /* bg.jpg */,
+				818C34F015492A8400AAE9D2 /* gbg.png */,
 				81519B0C15466170005E00D3 /* RTAppDelegate.h */,
 				81519B0D15466170005E00D3 /* RTAppDelegate.m */,
 				81519B0F15466170005E00D3 /* RTViewController.h */,
@@ -213,6 +216,7 @@
 				81519B2F1546717C005E00D3 /* RedController.xib in Resources */,
 				81519B34154671B7005E00D3 /* GreenController.xib in Resources */,
 				81519B3815468854005E00D3 /* bg.jpg in Resources */,
+				818C34F115492A8500AAE9D2 /* gbg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +354,7 @@
 				81519B1C15466170005E00D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

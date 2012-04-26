@@ -31,7 +31,9 @@
     self.window.backgroundColor = [UIColor whiteColor];
     // Override point for customization after application launch.
     RPagingViewController *vc = [[RPagingViewController alloc] init];
-    [vc setHeaderViewBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.jpg"]]];
+    [vc setHeaderViewBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"gbg.png"]]];
+    [vc setHeaderHeight:64];
+    
     UIViewController *r = [[RedController alloc] initWithNibName:@"RedController"
                                                           bundle:nil];
     r.title = @"Red";
@@ -45,7 +47,9 @@
     [r release],[g release],[b release];
     self.viewController = vc;
     [vc release];
-    self.window.rootViewController = self.viewController;
+    UINavigationController *n = [[UINavigationController alloc] initWithRootViewController:self.viewController];
+    self.window.rootViewController = n;
+    [n release];
     [self.window makeKeyAndVisible];
     return YES;
 }

@@ -18,6 +18,7 @@
     if (self) {
         // Custom initialization
         _headerHeight = 24.f;
+        self.wantsFullScreenLayout = NO;
     }
     return self;
 }
@@ -41,12 +42,15 @@
     
     headerSlider = [[RSlideView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, _headerHeight)];
     headerSlider.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-    headerSlider.pageSize = CGSizeMake(140, _headerHeight);
+    headerSlider.pageSize = CGSizeMake(160, _headerHeight);
+    headerSlider.pageMargin = 20;
+    headerSlider.loopSlide = YES;
     headerSlider.delegate = self;
     headerSlider.dataSource = self;
     
     mainSlider = [[RSlideView alloc] initWithFrame:CGRectMake(0, _headerHeight, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-_headerHeight)];
     mainSlider.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    mainSlider.loopSlide = YES;
     mainSlider.delegate = self;
     mainSlider.dataSource = self;
     
@@ -64,6 +68,11 @@
     [super viewDidLoad];
 }
 */
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    mainSlider.pageSize = mainSlider.bounds.size;
+}
 
 - (void)viewDidUnload
 {
@@ -93,6 +102,27 @@
     if (!self.isViewLoaded)
         [self loadView];
     headerSlider.pageSize = size;
+}
+
+- (void)setHeaderHeight:(CGFloat)headerHeight
+{
+    _headerHeight = headerHeight;
+    if (self.isViewLoaded) {
+        CGRect frame = headerSlider.frame;
+        frame.size.height = _headerHeight;
+        headerSlider.frame = frame;
+        
+        frame = mainSlider.frame;
+        frame.origin.y = _headerHeight;
+        frame.size.height = CGRectGetHeight(self.view.bounds) - _headerHeight;
+        mainSlider.frame = frame;
+        
+        CGSize size = headerSlider.pageSize;
+        size.height = _headerHeight;
+        headerSlider.pageSize = size;
+        
+        mainSlider.pageSize = mainSlider.bounds.size;
+    }
 }
 
 - (void)setViewControllers:(NSArray *)viewControllers
@@ -138,8 +168,32 @@
 
 - (void)RSlideView:(RSlideView *)sliderView didScrollAtPageOffset:(CGFloat)pageOffset
 {
-    if (sliderView == mainSlider) {
+    BOOL shouldDo = sliderView.scrollView.isDragging || sliderView.scrollView.isDecelerating;
+    if (sliderView == mainSlider && shouldDo ) {
         [headerSlider scrollToPageOffset:pageOffset];
+        /*
+        NSInteger page = floorf(pageOffset);
+        NSInteger currentPage = headerSlider.pageControl.currentPage;
+        NSInteger commingPage = currentPage;
+        CGFloat process = 0.f;
+        if (page == currentPage) {  // move to next
+            process = pageOffset - 1.f * currentPage;
+            commingPage = currentPage + 1;
+        }
+        else {                      // move to previous
+            process = 1.f * currentPage - pageOffset;
+            commingPage = currentPage - 1;
+        }
+        
+        UIView *current = [headerSlider viewOfPageAtIndex:currentPage];
+        UIView *comming = [headerSlider viewOfPageAtIndex:commingPage];
+        
+        comming.transform = CGAffineTransformMakeScale(1.f+ 1 * process, 1.f + 1 * process);
+        current.transform = CGAffineTransformMakeScale(1.f+ 1 * (1-process), 1.f + 1 * (1-process));
+         */
+    }
+    else if (sliderView == headerSlider && shouldDo ) {
+        [mainSlider scrollToPageOffset:pageOffset];
     }
 }
 
