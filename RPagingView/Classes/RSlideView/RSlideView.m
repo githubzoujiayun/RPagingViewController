@@ -75,6 +75,7 @@ enum {
                                                                               action:@selector(tapGestureHandler:)];
         tap.numberOfTapsRequired = 1;
         tap.numberOfTouchesRequired = 1;
+
         [self addGestureRecognizer:tap];
         [tap release];
 
@@ -106,13 +107,13 @@ enum {
 
 - (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    if (CGRectContainsPoint(_pageControl.frame, point))
+    if (!_pageControl.hidden && CGRectContainsPoint(_pageControl.frame, point))
         return [_pageControl hitTest:[self convertPoint:point toView:_pageControl]
                            withEvent:event];
-    else if (CGRectContainsPoint(self.bounds, point))
-        return _scrollView;
-    return nil;
+    return [_scrollView hitTest:[self convertPoint:point toView:_scrollView]
+                      withEvent:event];
 }
+
 
 #pragma mark - getter/setter
 
@@ -466,6 +467,14 @@ enum {
     return [self.scrollView viewWithTag:(index + kSubviewTagOffset)];
 }
 
+- (NSInteger)indexOfPageView:(UIView *)view
+{
+    if ([_scrollView.subviews containsObject:view]) {
+        return view.tag - kSubviewTagOffset;
+    }
+    return NSNotFound;
+}
+
 - (void)previousPage
 {
     if (!self.loopSlide && _currentPage == 0)
@@ -597,6 +606,11 @@ enum {
 
 #pragma mark - UIGesture Delegate
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer 
+       shouldReceiveTouch:(UITouch *)touch
+{
+    return YES;
+}
 
 @end
 
@@ -650,7 +664,7 @@ enum {
 
 - (void)setTitle:(NSString *)title
 {
-    if (![title isEqualToString:@""]) {
+    if (title && ![title isEqualToString:@""]) {
         
         if (!_titleLabel) {
             self.backgroundColor = [UIColor colorWithRed:0.f
@@ -743,6 +757,15 @@ enum {
 @end
 
 @implementation RScrollView
+
+- (UIView*)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    for (UIView *view in self.subviews) {
+        if (CGRectContainsPoint(view.frame, point))
+            return view;
+    }
+    return self;
+}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {

@@ -47,6 +47,7 @@
     headerSlider.loopSlide = YES;
     headerSlider.delegate = self;
     headerSlider.dataSource = self;
+    headerSlider.scrollView.scrollEnabled = NO;
     
     mainSlider = [[RSlideView alloc] initWithFrame:CGRectMake(0, _headerHeight, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-_headerHeight)];
     mainSlider.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -136,6 +137,13 @@
     [mainSlider reloadData];
 }
 
+- (void)onTitleTapped:(UIButton*)btn
+{
+    NSInteger idx = [headerSlider indexOfPageView:btn];
+    if (idx != NSNotFound)
+        [mainSlider scrollToPageAtIndex:idx];
+}
+
 #pragma mark - RSlideView Datasource
 
 - (NSInteger)RSlideViewNumberOfPages
@@ -147,14 +155,21 @@
    viewForPageAtIndex:(NSInteger)index
 {
     if (slideView == headerSlider) {
-        UILabel *label = (UILabel*)[headerSlider dequeueReusableView];
-        if (!label) {
-            label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 24)] autorelease];
-            label.textAlignment = UITextAlignmentCenter;
-            label.backgroundColor = [UIColor clearColor];
+        UIButton *button = (UIButton*)[headerSlider dequeueReusableView];
+        if (!button) {
+            button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.titleLabel.textAlignment = UITextAlignmentCenter;
+            [button setTitleColor:[UIColor blackColor]
+                         forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor brownColor]
+                         forState:UIControlStateHighlighted];
+            [button addTarget:self
+                       action:@selector(onTitleTapped:) 
+             forControlEvents:UIControlEventTouchUpInside];
         }
-        label.text = ((UIViewController*)[self.childViewControllers objectAtIndex:index]).title;
-        return label;
+        NSString *title = ((UIViewController*)[self.childViewControllers objectAtIndex:index]).title;
+        [button setTitle:title forState:UIControlStateNormal];
+        return button;
     }
     
     else if (slideView == mainSlider) {
@@ -168,8 +183,7 @@
 
 - (void)RSlideView:(RSlideView *)sliderView didScrollAtPageOffset:(CGFloat)pageOffset
 {
-    BOOL shouldDo = sliderView.scrollView.isDragging || sliderView.scrollView.isDecelerating;
-    if (sliderView == mainSlider && shouldDo ) {
+    if (sliderView == mainSlider) {
         [headerSlider scrollToPageOffset:pageOffset];
         /*
         NSInteger page = floorf(pageOffset);
@@ -192,9 +206,7 @@
         current.transform = CGAffineTransformMakeScale(1.f+ 1 * (1-process), 1.f + 1 * (1-process));
          */
     }
-    else if (sliderView == headerSlider && shouldDo ) {
-        [mainSlider scrollToPageOffset:pageOffset];
-    }
+
 }
 
 - (void)RSlideView:(RSlideView *)slideView tapEndOnPageAtIndex:(NSInteger)index

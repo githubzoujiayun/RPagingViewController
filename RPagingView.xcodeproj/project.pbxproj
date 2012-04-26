@@ -13,9 +13,6 @@
 		81519B081546616F005E00D3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81519B061546616F005E00D3 /* InfoPlist.strings */; };
 		81519B0A1546616F005E00D3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B091546616F005E00D3 /* main.m */; };
 		81519B0E15466170005E00D3 /* RTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B0D15466170005E00D3 /* RTAppDelegate.m */; };
-		81519B1115466170005E00D3 /* RTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B1015466170005E00D3 /* RTViewController.m */; };
-		81519B1415466170005E00D3 /* RTViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81519B1215466170005E00D3 /* RTViewController_iPhone.xib */; };
-		81519B1715466170005E00D3 /* RTViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81519B1515466170005E00D3 /* RTViewController_iPad.xib */; };
 		81519B2215466304005E00D3 /* RSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B2115466304005E00D3 /* RSlideView.m */; };
 		81519B2515466384005E00D3 /* RPagingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B2415466384005E00D3 /* RPagingViewController.m */; };
 		81519B291546713C005E00D3 /* BlueController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81519B271546713C005E00D3 /* BlueController.m */; };
@@ -39,10 +36,6 @@
 		81519B0B1546616F005E00D3 /* RPagingView-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RPagingView-Prefix.pch"; sourceTree = "<group>"; };
 		81519B0C15466170005E00D3 /* RTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTAppDelegate.h; sourceTree = "<group>"; };
 		81519B0D15466170005E00D3 /* RTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTAppDelegate.m; sourceTree = "<group>"; };
-		81519B0F15466170005E00D3 /* RTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTViewController.h; sourceTree = "<group>"; };
-		81519B1015466170005E00D3 /* RTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTViewController.m; sourceTree = "<group>"; };
-		81519B1315466170005E00D3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RTViewController_iPhone.xib; sourceTree = "<group>"; };
-		81519B1615466170005E00D3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RTViewController_iPad.xib; sourceTree = "<group>"; };
 		81519B1F15466304005E00D3 /* RSlideView+PrivateMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RSlideView+PrivateMethods.h"; sourceTree = "<group>"; };
 		81519B2015466304005E00D3 /* RSlideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSlideView.h; sourceTree = "<group>"; };
 		81519B2115466304005E00D3 /* RSlideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSlideView.m; sourceTree = "<group>"; };
@@ -110,10 +103,6 @@
 				818C34F015492A8400AAE9D2 /* gbg.png */,
 				81519B0C15466170005E00D3 /* RTAppDelegate.h */,
 				81519B0D15466170005E00D3 /* RTAppDelegate.m */,
-				81519B0F15466170005E00D3 /* RTViewController.h */,
-				81519B1015466170005E00D3 /* RTViewController.m */,
-				81519B1215466170005E00D3 /* RTViewController_iPhone.xib */,
-				81519B1515466170005E00D3 /* RTViewController_iPad.xib */,
 				81519B041546616F005E00D3 /* Supporting Files */,
 				81519B261546713C005E00D3 /* BlueController.h */,
 				81519B271546713C005E00D3 /* BlueController.m */,
@@ -210,8 +199,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				81519B081546616F005E00D3 /* InfoPlist.strings in Resources */,
-				81519B1415466170005E00D3 /* RTViewController_iPhone.xib in Resources */,
-				81519B1715466170005E00D3 /* RTViewController_iPad.xib in Resources */,
 				81519B2A1546713C005E00D3 /* BlueController.xib in Resources */,
 				81519B2F1546717C005E00D3 /* RedController.xib in Resources */,
 				81519B34154671B7005E00D3 /* GreenController.xib in Resources */,
@@ -229,7 +216,6 @@
 			files = (
 				81519B0A1546616F005E00D3 /* main.m in Sources */,
 				81519B0E15466170005E00D3 /* RTAppDelegate.m in Sources */,
-				81519B1115466170005E00D3 /* RTViewController.m in Sources */,
 				81519B2215466304005E00D3 /* RSlideView.m in Sources */,
 				81519B2515466384005E00D3 /* RPagingViewController.m in Sources */,
 				81519B291546713C005E00D3 /* BlueController.m in Sources */,
@@ -247,22 +233,6 @@
 				81519B071546616F005E00D3 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		81519B1215466170005E00D3 /* RTViewController_iPhone.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				81519B1315466170005E00D3 /* en */,
-			);
-			name = RTViewController_iPhone.xib;
-			sourceTree = "<group>";
-		};
-		81519B1515466170005E00D3 /* RTViewController_iPad.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				81519B1615466170005E00D3 /* en */,
-			);
-			name = RTViewController_iPad.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

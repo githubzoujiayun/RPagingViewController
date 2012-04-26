@@ -75,7 +75,7 @@ typedef enum {
 @end
 
 
-@interface RSlideView : UIControl 
+@interface RSlideView : UIView 
 <UIScrollViewDelegate,
 RPageControllDataSource,
 RPageControllDelegate,
@@ -114,6 +114,7 @@ UIGestureRecognizerDelegate> {
 - (void)reloadData;
 - (UIView*)dequeueReusableView;
 - (UIView*)viewOfPageAtIndex:(NSInteger)index;
+- (NSInteger)indexOfPageView:(UIView*)view;
 - (void)scrollToPageAtIndex:(NSInteger)index;   // Scroll to a page, e.g 1 ... n
 - (void)scrollToPageOffset:(CGFloat)pageOffset; // Scroll to a offset, can be 1.25
 
