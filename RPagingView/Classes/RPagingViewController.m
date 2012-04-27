@@ -42,7 +42,7 @@
     
     headerSlider = [[RSlideView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, _headerHeight)];
     headerSlider.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-    headerSlider.pageSize = CGSizeMake(160, _headerHeight);
+    headerSlider.pageSize = CGSizeMake(100, _headerHeight);
     headerSlider.pageMargin = 20;
     headerSlider.loopSlide = YES;
     headerSlider.delegate = self;
@@ -137,13 +137,6 @@
     [mainSlider reloadData];
 }
 
-- (void)onTitleTapped:(UIButton*)btn
-{
-    NSInteger idx = [headerSlider indexOfPageView:btn];
-    if (idx != NSNotFound)
-        [mainSlider scrollToPageAtIndex:idx];
-}
-
 #pragma mark - RSlideView Datasource
 
 - (NSInteger)RSlideViewNumberOfPages
@@ -163,9 +156,6 @@
                          forState:UIControlStateNormal];
             [button setTitleColor:[UIColor brownColor]
                          forState:UIControlStateHighlighted];
-            [button addTarget:self
-                       action:@selector(onTitleTapped:) 
-             forControlEvents:UIControlEventTouchUpInside];
         }
         NSString *title = ((UIViewController*)[self.childViewControllers objectAtIndex:index]).title;
         [button setTitle:title forState:UIControlStateNormal];
@@ -209,9 +199,9 @@
 
 }
 
-- (void)RSlideView:(RSlideView *)slideView tapEndOnPageAtIndex:(NSInteger)index
+- (void)RSlideView:(RSlideView *)slideView tapOnPageAtIndex:(NSInteger)index
 {
-    
+    [mainSlider scrollToPageAtIndex:index];
 }
 
 @end

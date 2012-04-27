@@ -61,25 +61,25 @@ enum {
         self.pageSize = frame.size;
         
         /*
-        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureHandler:)];
-        longPress.numberOfTouchesRequired = 1;
-        longPress.minimumPressDuration = 0.05;
-        longPress.delaysTouchesBegan = NO;
-        longPress.delegate = self;
-        [self addGestureRecognizer:longPress];
-        [longPress release];
-        
-        _longPress = longPress;
-        */
+         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureHandler:)];
+         longPress.numberOfTouchesRequired = 1;
+         longPress.minimumPressDuration = 0.05;
+         longPress.delaysTouchesBegan = NO;
+         longPress.delegate = self;
+         [self addGestureRecognizer:longPress];
+         [longPress release];
+         
+         _longPress = longPress;
+         */
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                               action:@selector(tapGestureHandler:)];
         tap.numberOfTapsRequired = 1;
         tap.numberOfTouchesRequired = 1;
-
+        
         [self addGestureRecognizer:tap];
         [tap release];
-
-         
+        
+        
         
             //[self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:longPress];
         
@@ -110,10 +110,11 @@ enum {
     if (!_pageControl.hidden && CGRectContainsPoint(_pageControl.frame, point))
         return [_pageControl hitTest:[self convertPoint:point toView:_pageControl]
                            withEvent:event];
-    return [_scrollView hitTest:[self convertPoint:point toView:_scrollView]
-                      withEvent:event];
+    else if (CGRectContainsPoint(self.bounds, point))
+        return [_scrollView hitTest:[self convertPoint:point toView:_scrollView]
+                          withEvent:event];
+    return nil;
 }
-
 
 #pragma mark - getter/setter
 
@@ -186,7 +187,7 @@ enum {
         return;
     
     _continuousScroll = continusScroll;
-
+    
     self.scrollView.pagingEnabled = !_continuousScroll;
 }
 
@@ -198,10 +199,10 @@ enum {
     _loopSlide = loopSlide;
     
     if (_loopSlide) {
-
+        
         CGFloat w = self.frame.size.width;
         _scrollView.contentInset = UIEdgeInsetsMake(0, 2*w, 0, 2*w);
-
+        
     }
     else {
         _scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
@@ -214,7 +215,7 @@ enum {
 - (void)setPageSize:(CGSize)pageSize
 {
     NSAssert(pageSize.width <= self.bounds.size.width, @"The page width should be smaller than view width");
-
+    
     if (!CGSizeEqualToSize(_pageSize, pageSize)) {
         _pageSize = pageSize;
         _scrollView.frame = CGRectMake((CGRectGetWidth(self.bounds)-_pageSize.width-_pageMargin)/2, 
@@ -265,12 +266,7 @@ enum {
 
 - (void)loadViewOfPageAtIndex:(NSInteger)index
 {
-    NSInteger indexToLoad = index;
-    if (indexToLoad < 0) {
-        indexToLoad = (NSInteger)((-indexToLoad + _totalPages - 1)/_totalPages)*_totalPages + indexToLoad;
-    }
-    else if (indexToLoad > _totalPages - 1)
-        indexToLoad %= _totalPages;
+    NSInteger indexToLoad = (index - index / _totalPages * _totalPages + _totalPages) % _totalPages;
     
     CGSize size = self.scrollView.bounds.size;
     UIView *view = [self viewOfPageAtIndex:index];
@@ -351,73 +347,24 @@ enum {
                              animated:YES];
 }
 
-- (void)longPressGestureHandler:(UILongPressGestureRecognizer *)longPress
-{
-    switch (longPress.state) {
-        case UIGestureRecognizerStateBegan:
-            if ([self.delegate respondsToSelector:@selector(RSlideView:tapStartOnPageAtIndex:)]) {
-                [self.delegate RSlideView:self tapStartOnPageAtIndex:_currentPage];
-            }
-            break;
-        case UIGestureRecognizerStateChanged:
-            break;
-        case UIGestureRecognizerStateEnded:
-            if ([self.delegate respondsToSelector:@selector(RSlideView:tapEndOnPageAtIndex:)]) {
-                [self.delegate RSlideView:self tapEndOnPageAtIndex:_currentPage];
-            }
-            [self adjustScrollViewOffsetToSinglePage];
-            break;
-        default:
-            break;
-    }
-}
-
 - (void)tapGestureHandler:(UITapGestureRecognizer *)tap
 {
     switch (tap.state) {
         case UIGestureRecognizerStateBegan:
-            if ([self.delegate respondsToSelector:@selector(RSlideView:tapStartOnPageAtIndex:)]) {
-                [self.delegate RSlideView:self tapStartOnPageAtIndex:_currentPage];
-            }
-            break;
-        case UIGestureRecognizerStateChanged:
-            break;
-        case UIGestureRecognizerStateEnded:
-            if ([self.delegate respondsToSelector:@selector(RSlideView:tapEndOnPageAtIndex:)]) {
-                [self.delegate RSlideView:self tapEndOnPageAtIndex:_currentPage];
-            }
-            [self adjustScrollViewOffsetToSinglePage];
-            break;
-        default:
-            break;
-    }
-}
 
-- (void)panGestureHandler:(UIPanGestureRecognizer *)pan
-{
-    switch (pan.state) {
-        case UIGestureRecognizerStateBegan:
-            ;
             break;
         case UIGestureRecognizerStateChanged:
-            ;
             break;
         case UIGestureRecognizerStateEnded:
         {
-            if (!self.scrollView.pagingEnabled) {
-                CGPoint v = [pan velocityInView:self];
-                if (v.x < -360) {
-                    [self nextPage];
-                }
-                else if (v.x > 360) {
-                    [self previousPage];
-                }
-                else {
-                    [self adjustScrollViewOffsetToSinglePage];
-                }
+            CGPoint location = [tap locationInView:_scrollView];
+            UIView *view = [_scrollView hitTest:location withEvent:nil];
+            NSInteger idx = [self indexOfPageView:view];
+            if ([self.delegate respondsToSelector:@selector(RSlideView:tapOnPageAtIndex:)]) {
+                [self.delegate RSlideView:self tapOnPageAtIndex:idx];
             }
-            break;
         }
+            break;
         default:
             break;
     }
@@ -493,6 +440,7 @@ enum {
 {
     if (_allowScrollToPage) {
         _allowScrollToPage = NO;
+            //index = (index - index / _totalPages * _totalPages + _totalPages) % _totalPages;
         [self.scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width*index, 0)
                                  animated:YES];
     }
@@ -609,7 +557,7 @@ enum {
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer 
        shouldReceiveTouch:(UITouch *)touch
 {
-    return YES;
+    return NO;
 }
 
 @end
@@ -765,30 +713,6 @@ enum {
             return view;
     }
     return self;
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesBegan:touches withEvent:event];
-    [self.superview touchesBegan:touches withEvent:event];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesMoved:touches withEvent:event];
-    [self.superview touchesMoved:touches withEvent:event];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesEnded:touches withEvent:event];
-    [self.superview touchesEnded:touches withEvent:event];
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesCancelled:touches withEvent:event];
-    [self.superview touchesCancelled:touches withEvent:event];
 }
 
 @end
